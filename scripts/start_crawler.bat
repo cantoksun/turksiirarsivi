@@ -1,8 +1,8 @@
 @echo off
 chcp 65001 > nul
-title Raff Antoloji Siir Arsivleme Motoru
+title türk şiir arşivi tarama motoru
 echo ========================================================
-echo   Raff Culture - Antoloji.com Siir Arsivleme Botu
+echo   türk şiir arşivi - antoloji.com tarama motoru
 echo ========================================================
 echo.
 cd /d "%~dp0"

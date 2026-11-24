@@ -206,10 +206,10 @@ function parsePoem(html, url, defaultPoetName) {
 
 async function main() {
   console.log('='.repeat(70));
-  console.log('   TÜRK EDEBİYATI USTA ŞAİRLERİ %100 TAM KÜLLİYAT MOTORU');
+  console.log('   türk edebiyatı usta şairleri külliyat motoru');
   console.log('='.repeat(70));
 
-  console.log('[*] Mevcut arşiv taranıyor...');
+  console.log('[*] mevcut arşiv taranıyor...');
   const knownSignatures = new Set();
   const knownUrls = new Set();
   const knownSlugs = new Set();
@@ -373,17 +373,16 @@ async function main() {
       sql += `INSERT INTO contents (type, title, slug, cover_image, backdrop_image, content_text, summary, genres, global_rating, metadata) VALUES ('poem', ${escapeSql(p.title)}, ${escapeSql(p.slug)}, ${escapeSql(p.cover_image)}, ${escapeSql(p.backdrop_image)}, ${escapeSql(p.content_text)}, ${escapeSql(p.summary)}, ${genresStr}, ${p.global_rating || 9.0}, ${metaStr}::jsonb) ON CONFLICT (slug) DO NOTHING;\n`;
     }
     fs.writeFileSync(MASTERS_SQL_FILE, sql, 'utf-8');
-    console.log(`[💾 SQL DOSYASI KAYDEDİLDİ] ${MASTERS_SQL_FILE}`);
+    console.log(`[💾 sql dosyası kaydedildi] ${MASTERS_SQL_FILE}`);
   } else {
-    console.log(`\n🎉 MÜKEMMEL: Usta şairlerin tüm şiirleri zaten arşivinizde eksiksiz yer alıyor!`);
+    console.log(`\n🎉 usta şairlerin tüm şiirleri arşivde eksiksiz yer alıyor.`);
   }
 
   console.log('\n' + '='.repeat(70));
-  console.log(`🎉 DOĞRULAMA TAMAMLANDI!`);
-  console.log(`   Arşivdeki Güncel Toplam Şiir: ${poems.length}`);
+  console.log(`🎉 doğrulama tamamlandı!`);
   console.log('='.repeat(70));
 }
 
 main().catch(err => {
-  console.error('\n[❌ HATA]:', err);
+  console.error('\n[❌ hata]:', err);
 });

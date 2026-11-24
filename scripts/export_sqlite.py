@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Türk Şiir Arşivi - SQLite Veritabanı Dönüştürücü
-220.600+ şiiri FTS5 (Full-Text Search) tam metin arama indeksli SQLite veritabanına aktarır.
+türk şiir arşivi - sqlite veritabanı dönüştürücü
+220.600+ şiiri fts5 (full-text search) tam metin arama indeksli sqlite veritabanına aktarır.
 """
 
 import gzip
@@ -27,14 +27,14 @@ def main():
         source_path = gz_file
         is_gz = True
     else:
-        print("[!] Veri dosyası bulunamadı (data/poems_data.jsonl.gz veya data/poems_data.jsonl bekleniyor).")
+        print("[!] veri dosyası bulunamadı (data/poems_data.jsonl.gz veya data/poems_data.jsonl bekleniyor).")
         sys.exit(1)
 
     print("=" * 65)
-    print("   TÜRK ŞİİR ARŞİVİ - SQLITE VE FTS5 AKTARIM ARACI")
+    print("   türk şiir arşivi - sqlite ve fts5 aktarım aracı")
     print("=" * 65)
-    print(f"[*] Kaynak: {source_path}")
-    print(f"[*] Hedef:  {db_file}")
+    print(f"[*] kaynak: {source_path}")
+    print(f"[*] hedef:  {db_file}")
 
     if os.path.exists(db_file):
         os.remove(db_file)
@@ -90,7 +90,7 @@ def main():
     total = 0
     start_time = time.time()
 
-    print("[*] Veriler okunuyor ve SQLite tablosuna yazılıyor...")
+    print("[*] veriler okunuyor ve sqlite tablosuna yazılıyor...")
 
     with open_fn(source_path, mode, encoding="utf-8") as f:
         for line in f:
@@ -127,7 +127,7 @@ def main():
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
                     """, batch)
                     conn.commit()
-                    print(f"\r[+] İçe aktarılan: {total:,} şiir...", end="", flush=True)
+                    print(f"\r[+] içe aktarılan: {total:,} şiir...", end="", flush=True)
                     batch = []
 
             except Exception:
@@ -140,7 +140,7 @@ def main():
         """, batch)
         conn.commit()
 
-    print(f"\r[+] Toplam {total:,} şiir kaydedildi! FTS5 arama indeksi inşa ediliyor...")
+    print(f"\r[+] toplam {total:,} şiir kaydedildi! fts5 arama indeksi inşa ediliyor...")
 
     cursor.execute("""
     INSERT INTO poems_fts(rowid, title, poet, content_text)
@@ -148,7 +148,7 @@ def main():
     """)
     conn.commit()
 
-    # Optimize and vacuum
+    # Optimize
     cursor.execute("INSERT INTO poems_fts(poems_fts) VALUES('optimize');")
     conn.commit()
     conn.close()
@@ -156,10 +156,10 @@ def main():
     elapsed = time.time() - start_time
     size_mb = os.path.getsize(db_file) / (1024 * 1024)
     print("\n" + "=" * 65)
-    print(f"🎉 BAŞARILI! SQLite veritabanı hazır: {db_file}")
-    print(f"   Toplam Şiir: {total:,} adet")
-    print(f"   Dosya Boyutu: {size_mb:.1f} MB")
-    print(f"   Geçen Süre: {elapsed:.1f} saniye")
+    print(f"🎉 başarılı! sqlite veritabanı hazır: {db_file}")
+    print(f"   toplam şiir: {total:,} adet")
+    print(f"   dosya boyutu: {size_mb:.1f} mb")
+    print(f"   geçen süre: {elapsed:.1f} saniye")
     print("=" * 65)
 
 if __name__ == "__main__":

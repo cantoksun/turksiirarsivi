@@ -1,22 +1,22 @@
-# Turk Siir Arsivi
+# türk şiir arşivi
 
-Turk edebiyatinin farkli donemlerine ait siir verilerini, SQL batch dosyalarini ve veri toplama araclarini iceren acik kaynakli arsiv deposu.
+türk edebiyatının farklı dönemlerine ait şiir verilerini, sql batch dosyalarını ve veri toplama araçlarını içeren açık kaynaklı arşiv deposu.
 
 ---
 
-## Dizin Yapisi
+## dizin yapısı
 
 ```text
 turksiirarsivi/
 ├── data/
-│   ├── poems_data.jsonl.gz           # Tum veri seti (Gzip JSONL formati)
-│   ├── crawler_state.json            # Tarayici durum takip dosyasi
-│   └── batches/                      # SQL INSERT paketleri (1 - 44)
+│   ├── poems_data.jsonl.gz           # tüm veri seti (gzip jsonl formatı)
+│   ├── crawler_state.json            # tarayıcı durum takip dosyası
+│   └── batches/                      # sql insert paketleri (1 - 44)
 ├── scripts/
-│   ├── antoloji_crawler.js           # Kalinan yerden devam edebilen tarama araci
-│   ├── harvest_master_poets.js       # Sair tamamlama ve kontrol araci
-│   ├── export_sqlite.py              # SQLite aktarim ve FTS5 indeksleme scripti
-│   └── start_crawler.bat             # Calistirma betigi
+│   ├── antoloji_crawler.js           # kalınan yerden devam edebilen tarama aracı
+│   ├── harvest_master_poets.js       # şair tamamlama ve kontrol aracı
+│   ├── export_sqlite.py              # sqlite aktarım ve fts5 indeksleme scripti
+│   └── start_crawler.bat             # çalıştırma betiği
 ├── .gitignore
 ├── LICENSE
 └── README.md
@@ -24,36 +24,36 @@ turksiirarsivi/
 
 ---
 
-## Veri Semasi
+## veri şeması
 
-| Alan | Tip | Aciklama |
+| alan | tip | açıklama |
 | :--- | :--- | :--- |
-| `type` | `string` | Icerik tipi ('poem') |
-| `title` | `string` | Siir basligi |
-| `slug` | `string` | Benzersiz url anahtari |
-| `content_text` | `text` | Siir metni |
-| `summary` | `string` | Kisa onizleme metni |
-| `genres` | `array` | Edebiyat ve sair etiketleri |
-| `metadata.poet` | `string` | Sair adi |
-| `metadata.poet_slug` | `string` | Sair url anahtari |
-| `metadata.total_lines` | `integer` | Satir sayisi |
-| `metadata.source_url` | `string` | Kaynak web adresi |
+| `type` | `string` | içerik tipi ('poem') |
+| `title` | `string` | şiir başlığı |
+| `slug` | `string` | benzersiz url anahtarı |
+| `content_text` | `text` | şiir metni |
+| `summary` | `string` | kısa önizleme metni |
+| `genres` | `array` | edebiyat ve şair etiketleri |
+| `metadata.poet` | `string` | şair adı |
+| `metadata.poet_slug` | `string` | şair url anahtarı |
+| `metadata.total_lines` | `integer` | satır sayısı |
+| `metadata.source_url` | `string` | kaynak web adresi |
 
 ---
 
-## Kullanim
+## kullanım
 
-### 1. SQLite Veritabanina Donusturme
+### 1. sqlite veritabanına dönüştürme
 
-Verileri FTS5 tam metin aramali SQLite veritabanina aktarmak icin:
+verileri fts5 tam metin aramalı sqlite veritabanına aktarmak için:
 
 ```bash
 python scripts/export_sqlite.py
 ```
 
-### 2. Tarayiciyi Calistirma
+### 2. tarayıcıyı çalıştırma
 
-Tarama aracini son kaydedilen durumdan devam ettirmek icin:
+tarama aracını son kaydedilen durumdan devam ettirmek için:
 
 ```bash
 node scripts/antoloji_crawler.js
@@ -61,6 +61,6 @@ node scripts/antoloji_crawler.js
 
 ---
 
-## Lisans
+## lisans
 
-MIT Lisansi.
+mit lisansı.

@@ -75,7 +75,7 @@ function writeBatchSql(batchNumber, items) {
     fs.mkdirSync(BATCHES_DIR, { recursive: true });
   }
   const filePath = path.join(BATCHES_DIR, `poems_batch_${batchNumber}.sql`);
-  let sql = `-- TÜRK ŞİİR ARŞİVİ BATCH ${batchNumber} (${items.length} ŞİİR)\n-- Oluşturulma: ${new Date().toISOString()}\n\n`;
+  let sql = `-- türk şiir arşivi batch ${batchNumber} (${items.length} şiir)\n-- oluşturulma: ${new Date().toISOString()}\n\n`;
 
   for (const poem of items) {
     const genresStr = "ARRAY[" + (poem.genres || []).map(g => escapeSql(g)).join(',') + "]::text[]";
@@ -85,7 +85,7 @@ function writeBatchSql(batchNumber, items) {
   }
 
   fs.writeFileSync(filePath, sql, 'utf-8');
-  console.log(`\n[💾 BATCH KAYDEDİLDİ] ${filePath} (${items.length} adet şiir)`);
+  console.log(`\n[💾 batch kaydedildi] ${filePath} (${items.length} adet şiir)`);
 }
 
 async function fetchWithRetry(url, retries = 3, delay = 800) {
@@ -223,19 +223,19 @@ async function loadExistingRecords(knownSignatures, knownSlugs) {
 
 async function main() {
   console.log('='.repeat(65));
-  console.log('   TÜRK ŞİİR ARŞİVİ - ANTOLOJI.COM STABİL TARAMA MOTORU');
+  console.log('   türk şiir arşivi - antoloji.com stabil tarama motoru');
   console.log('='.repeat(65));
 
   // 1. Build Memory-Efficient Duplicate Detection
   const knownSignatures = new Set();
   const knownSlugs = new Set();
 
-  console.log('[*] Mevcut kayıtlar taranıyor...');
+  console.log('[*] mevcut kayıtlar taranıyor...');
   const { count: totalPoemsInitial, currentBatch: initialBatch } = await loadExistingRecords(knownSignatures, knownSlugs);
   let totalPoemsCount = totalPoemsInitial;
   let currentBatch = initialBatch;
 
-  console.log(`[+] Başarıyla indekslendi: ${totalPoemsCount} mevcut şiir, ${knownSignatures.size} imza.`);
+  console.log(`[+] başarıyla indekslendi: ${totalPoemsCount} mevcut şiir, ${knownSignatures.size} imza.`);
 
   // 2. Load or initialize crawler state
   let state = {
@@ -248,21 +248,21 @@ async function main() {
   if (fs.existsSync(STATE_FILE)) {
     try {
       state = JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
-      console.log(`[🔄 KALDIĞI YERDEN DEVAM] Sitemap #${state.sitemapIndex + 1}, URL #${state.urlIndex}`);
+      console.log(`[🔄 kaldığı yerden devam] sitemap #${state.sitemapIndex + 1}, url #${state.urlIndex}`);
     } catch (e) {
-      console.log('[!] State dosyası sıfırlandı.');
+      console.log('[!] durum dosyası sıfırlandı.');
     }
   }
 
   // 3. Fetch sitemap index
-  console.log('[*] Antoloji.com sitemap listesi alınıyor...');
+  console.log('[*] antoloji.com sitemap listesi alınıyor...');
   const mainSitemapXml = await fetchWithRetry('https://www.antoloji.com/sitemap.xml');
   if (!mainSitemapXml) {
-    throw new Error('Ana sitemap çekilemedi!');
+    throw new Error('ana sitemap çekilemedi!');
   }
 
   const sitemapUrls = [...mainSitemapXml.matchAll(/<loc>(https:\/\/www\.antoloji\.com\/sitemap-siirler-[^<]+)<\/loc>/g)].map(m => m[1]);
-  console.log(`[+] Toplam ${sitemapUrls.length} adet sitemap paketi bulundu.`);
+  console.log(`[+] toplam ${sitemapUrls.length} adet sitemap paketi bulundu.`);
 
   let batchCounter = Math.floor(totalPoemsCount / BATCH_SIZE);
   let pendingBuffer = [];
@@ -368,7 +368,7 @@ async function main() {
 
       if (pendingBuffer.length >= FLUSH_INTERVAL) {
         flushToDisk();
-        process.stdout.write(`\r[✨ GELİŞME] Toplam Şiir: ${totalPoemsCount} (+${state.totalAdded} yeni) | Atlanan Mükerrer: ${state.totalDuplicatesSkipped} | Paket: ${sIdx + 1}/${sitemapUrls.length}`);
+        process.stdout.write(`\r[✨ gelişme] toplam şiir: ${totalPoemsCount} (+${state.totalAdded} yeni) | atlanan mükerrer: ${state.totalDuplicatesSkipped} | paket: ${sIdx + 1}/${sitemapUrls.length}`);
       }
 
       await new Promise(r => setTimeout(r, 100));
@@ -387,10 +387,10 @@ async function main() {
   }
 
   console.log('\n' + '='.repeat(65));
-  console.log(`🎉 ARŞİVLEME TAMAMLANDI! Toplam Şiir: ${totalPoemsCount}`);
+  console.log(`🎉 arşivleme tamamlandı! toplam şiir: ${totalPoemsCount}`);
   console.log('='.repeat(65));
 }
 
 main().catch(err => {
-  console.error('\n[❌ HATA]:', err);
+  console.error('\n[❌ hata]:', err);
 });
